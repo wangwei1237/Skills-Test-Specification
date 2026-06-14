@@ -3,7 +3,7 @@ import starlight from '@astrojs/starlight';
 
 export default defineConfig({
   site: 'https://wangwei1237.github.io',
-  base: '/skill-test-spec',
+  base: '/Skills-Test-Specification',
   integrations: [
     starlight({
       title: 'Skills Test Specification',

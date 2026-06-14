@@ -7,7 +7,7 @@ This repository is a Starlight documentation site.
 The production site is published under:
 
 ```text
-https://wangwei1237.github.io/skill-test-spec/
+https://wangwei1237.github.io/Skills-Test-Specification/
 ```
 
 ## Development
@@ -20,7 +20,7 @@ npm run dev
 With the configured Astro `base`, the local entry point is:
 
 ```text
-http://localhost:4321/skill-test-spec/
+http://localhost:4321/Skills-Test-Specification/
 ```
 
 ## Build

@@ -39,14 +39,14 @@ jobs:
 
       - name: Package HTML artifact
         run: |
-          mv dist skill-test-spec
-          tar czf skill-test-spec.tar.gz skill-test-spec
+          mv dist Skills-Test-Specification
+          tar czf Skills-Test-Specification.tar.gz Skills-Test-Specification
 
       - name: Upload workflow artifact
         uses: actions/upload-artifact@v6
         with:
-          name: skill-test-spec-html
-          path: skill-test-spec.tar.gz
+          name: Skills-Test-Specification-html
+          path: Skills-Test-Specification.tar.gz
           if-no-files-found: error
 
       - name: Create GitHub release
@@ -55,7 +55,7 @@ jobs:
           tag_name: ${{ github.event.inputs.version }}
           name: Build for ${{ github.event.inputs.version }}
           generate_release_notes: true
-          files: skill-test-spec.tar.gz
+          files: Skills-Test-Specification.tar.gz
 
   trigger:
     needs: build
@@ -69,4 +69,4 @@ jobs:
             -H "Accept: application/vnd.github.v3+json" \
             -H "Authorization: token ${{ secrets.TOKEN }}" \
             https://api.github.com/repos/wangwei1237/wangwei1237.github.io_src/dispatches \
-            -d '{"event_type":"update","client_payload":{"from":"${{ github.repository }}","version":"${{ github.event.inputs.version }}","path":"skill-test-spec","msg":"${{ github.workflow }} release"}}'
+            -d '{"event_type":"update","client_payload":{"from":"${{ github.repository }}","version":"${{ github.event.inputs.version }}","path":"Skills-Test-Specification","msg":"${{ github.workflow }} release"}}'
