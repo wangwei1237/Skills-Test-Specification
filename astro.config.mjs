@@ -4,6 +4,9 @@ import starlight from '@astrojs/starlight';
 export default defineConfig({
   site: 'https://wangwei1237.github.io',
   base: '/Skills-Test-Specification',
+  build: {
+    assets: 'assets',
+  },
   integrations: [
     starlight({
       title: 'Skills Test Specification',
