@@ -1,0 +1,14 @@
+---
+title: "编写原则"
+description: "Skills Test Specification - 编写原则"
+---
+
+1. **字段统一**：所有 Case 保持相同字段结构，空值也保留。
+2. **Query 明确**：Plan Case 必须声明“不执行工具、不修改文件、只输出计划”。
+3. **Expected 可判断**：避免“输出完整”“分析清楚”这类模糊描述。
+4. **Assertions 可自动化**：优先使用简单、可解析的断言。
+5. **必须有正反例**：每个 Skill 至少有一个触发正例和一个触发反例。
+6. **禁止 Skill 调用 Skill**：跨阶段流程由 Hooks、Workflow Runtime 或主 Agent 编排。
+7. **Skill 目录放小测试**：完整测试集放 `tests/skill-evals/<skill-name>/`。
+
+

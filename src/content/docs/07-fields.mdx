@@ -1,0 +1,28 @@
+---
+title: "字段说明"
+description: "Skills Test Specification - 字段说明"
+---
+
+| 字段 | 必填 | 说明 |
+|---|---|---|
+| `version` | 是 | 测试规范版本 |
+| `skill.name` | 是 | 被测 Skill 名称 |
+| `skill.description` | 否 | Skill 简要说明 |
+| `defaults.mode` | 是 | 默认测试模式，推荐 `dry-run` |
+| `defaults.execution` | 是 | 是否允许工具调用，Skill 单测推荐 `no_tool_call` |
+| `cases[].id` | 是 | 用例唯一 ID |
+| `cases[].type` | 是 | `trigger` / `plan` / `contract` / `edge` / `failure` |
+| `cases[].title` | 是 | 用例标题 |
+| `cases[].query` | 是 | 测试输入 |
+| `inputs.files` | 是 | 测试依赖文件，无则为空数组 |
+| `inputs.context` | 是 | 额外上下文，无则为空对象 |
+| `expected.skill.should_use` | 是 | 期望使用的 Skill |
+| `expected.skill.should_not_use` | 是 | 不应使用的 Skill 列表 |
+| `expected.must_include` | 是 | 输出中必须包含的步骤、字段或语义 |
+| `expected.must_not_include` | 是 | 输出中不能出现的行为或内容 |
+| `expected.artifacts` | 是 | 期望产物 |
+| `expected.routing` | 是 | 成功、失败或阻塞时的路由 |
+| `assertions` | 是 | 可被脚本或 LLM Judge 执行的断言 |
+| `tags` | 否 | 用于筛选测试集 |
+
+

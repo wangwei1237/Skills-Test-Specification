@@ -1,0 +1,163 @@
+---
+title: "完整模板"
+description: "Skills Test Specification - 完整模板"
+---
+
+```yaml
+version: "1.0"
+
+skill:
+  name: "<skill-name>"
+  description: "<skill-description>"
+
+defaults:
+  mode: "dry-run"
+  execution: "no_tool_call"
+  output_format: "json"
+
+cases:
+  - id: "trigger_001"
+    type: "trigger"
+    title: "<正向触发场景>"
+    query: "<用户请求>"
+    inputs:
+      files: []
+      context: {}
+    expected:
+      skill:
+        should_use: "<skill-name>"
+        should_not_use: []
+      must_include: []
+      must_not_include: []
+      artifacts: []
+      routing: {}
+    assertions:
+      - "selected_skill == '<skill-name>'"
+    tags:
+      - "trigger"
+      - "positive"
+
+  - id: "trigger_002"
+    type: "trigger"
+    title: "<反向触发场景>"
+    query: "<不应触发该 Skill 的用户请求>"
+    inputs:
+      files: []
+      context: {}
+    expected:
+      skill:
+        should_use: "<better-skill-or-empty>"
+        should_not_use:
+          - "<skill-name>"
+      must_include: []
+      must_not_include: []
+      artifacts: []
+      routing: {}
+    assertions:
+      - "selected_skill != '<skill-name>'"
+    tags:
+      - "trigger"
+      - "negative"
+
+  - id: "plan_001"
+    type: "plan"
+    title: "<计划测试场景>"
+    query: > <用户请求>
+    inputs:
+      files: []
+      context: {}
+    expected:
+      skill:
+        should_use: "<skill-name>"
+        should_not_use: []
+      must_include:
+        - "<步骤1>"
+        - "<步骤2>"
+      must_not_include:
+        - "<禁止行为>"
+      artifacts:
+        - "<expected_artifact>"
+      routing:
+        on_success: "finish"
+        on_failure: "<target-agent>"
+    assertions:
+      - "selected_skill == '<skill-name>'"
+      - "'<expected_artifact>' in artifacts"
+    tags:
+      - "plan"
+      - "dry-run"
+
+  - id: "contract_001"
+    type: "contract"
+    title: "<输出契约测试场景>"
+    query: "<要求生成结构化产物的请求>"
+    inputs:
+      files: []
+      context: {}
+    expected:
+      skill:
+        should_use: "<skill-name>"
+        should_not_use: []
+      must_include:
+        - "<required_field>"
+      must_not_include: []
+      artifacts:
+        - "<expected_artifact>"
+      routing: {}
+    assertions:
+      - "artifact_exists('<expected_artifact>')"
+    tags:
+      - "contract"
+      - "schema"
+
+  - id: "edge_001"
+    type: "edge"
+    title: "<边界场景>"
+    query: "<信息缺失或输入冲突的请求>"
+    inputs:
+      files: []
+      context: {}
+    expected:
+      skill:
+        should_use: "<skill-name>"
+        should_not_use: []
+      must_include:
+        - "NEEDS_CONFIRMATION"
+      must_not_include:
+        - "编造信息"
+      artifacts: []
+      routing:
+        on_blocked: "human_confirm"
+    assertions:
+      - "status in ['BLOCKED', 'NEEDS_CONFIRMATION']"
+    tags:
+      - "edge"
+      - "anti-hallucination"
+
+  - id: "failure_001"
+    type: "failure"
+    title: "<失败处理场景>"
+    query: "<失败日志或失败报告分析请求>"
+    inputs:
+      files: []
+      context: {}
+    expected:
+      skill:
+        should_use: "<skill-name>"
+        should_not_use: []
+      must_include:
+        - "失败原因"
+        - "下一步动作"
+      must_not_include:
+        - "仅输出失败，无处理建议"
+      artifacts:
+        - "<failure_report>"
+      routing:
+        on_failure: "<target-agent>"
+    assertions:
+      - "status == 'FAIL'"
+      - "next_action != ''"
+    tags:
+      - "failure"
+      - "routing"
+```

@@ -1,0 +1,253 @@
+---
+title: "各类 Case 编写要求"
+description: "Skills Test Specification - 各类 Case 编写要求"
+---
+
+### Trigger Case
+
+用于验证 Skill 是否应该被触发。
+
+要求至少包含：
+
+- 一个正例：应该触发该 Skill；
+- 一个反例：不应该触发该 Skill；
+- 如有相似 Skill，应加入误触发测试。
+
+示例：
+
+```yaml
+- id: "trigger_001"
+  type: "trigger"
+  title: "API 测试请求应触发 api-test-flow"
+  query: "请根据 PRD 验证登录接口是否符合预期"
+  inputs:
+    files: []
+    context: {}
+  expected:
+    skill:
+      should_use: "api-test-flow"
+      should_not_use:
+        - "ui-acceptance-test"
+    must_include: []
+    must_not_include: []
+    artifacts: []
+    routing: {}
+  assertions:
+    - "selected_skill == 'api-test-flow'"
+  tags:
+    - "trigger"
+    - "positive"
+```
+
+### Plan Case
+
+用于验证模型是否理解 Skill 的执行流程。
+
+Plan Case 必须要求：
+
+- 不实际执行工具；
+- 不修改文件；
+- 只输出计划；
+- 明确使用哪个 Skill；
+- 明确步骤、输入、输出、成功/失败标准、失败路由。
+
+推荐 Query：
+
+:::note[备注]
+如果用户 Query 是：“xxxx”，你会怎么做？
+不要实际执行工具，不要修改文件，只输出计划。
+:::
+
+示例：
+
+```yaml
+- id: "plan_001"
+  type: "plan"
+  title: "API 测试 Skill 应给出正确执行计划"
+  query: >
+    请根据 PRD 验证登录接口是否符合预期。
+  inputs:
+    files:
+      - "examples/login_prd.md"
+      - "examples/login_api_doc.md"
+    context:
+      target_api: "login"
+  expected:
+    skill:
+      should_use: "api-test-flow"
+      should_not_use: []
+    must_include:
+      - "读取 PRD"
+      - "读取 API 文档"
+      - "生成 API 测试用例"
+      - "解析测试结果"
+      - "输出 api_test_report"
+    must_not_include:
+      - "直接修改业务代码"
+    artifacts:
+      - "api_test_report.json"
+    routing:
+      on_success: "finish"
+      on_code_failure: "coding-agent"
+      on_case_failure: "testcase-agent"
+      on_env_failure: "env-agent"
+  assertions:
+    - "selected_skill == 'api-test-flow'"
+    - "'api_test_report.json' in artifacts"
+  tags:
+    - "plan"
+    - "dry-run"
+```
+
+### Contract Case
+
+用于验证输出契约。
+
+重点检查：
+
+- 产物文件名；
+- 必填字段；
+- 字段取值范围；
+- Markdown 标题结构；
+- JSON Schema；
+- 是否可被下游 Agent 或 Hook 消费。
+
+示例：
+
+```yaml
+- id: "contract_001"
+  type: "contract"
+  title: "api_test_report.json 输出契约校验"
+  query: "请根据样例接口文档生成 API 测试报告，不要实际执行测试"
+  inputs:
+    files:
+      - "examples/login_prd.md"
+      - "examples/login_api_doc.md"
+    context:
+      mock_result: "pass"
+  expected:
+    skill:
+      should_use: "api-test-flow"
+      should_not_use: []
+    must_include:
+      - "status"
+      - "tested_apis"
+      - "test_cases"
+      - "failures"
+      - "next_action"
+    must_not_include:
+      - "不存在的接口字段"
+    artifacts:
+      - "api_test_report.json"
+    routing:
+      on_success: "finish"
+      on_failure: "coding-agent"
+  assertions:
+    - "artifact_exists('api_test_report.json')"
+    - "json_field_exists('api_test_report.json', 'status')"
+    - "json_field_in('api_test_report.json', 'status', ['PASS', 'FAIL', 'BLOCKED'])"
+  tags:
+    - "contract"
+    - "schema"
+```
+
+### Edge Case
+
+用于验证信息不足、输入冲突、文档缺失等场景。
+
+要求模型：
+
+- 不编造缺失信息；
+- 明确标记缺失字段；
+- 可输出 `BLOCKED` 或 `NEEDS_CONFIRMATION`；
+- 给出下一步确认问题。
+
+示例：
+
+```yaml
+- id: "edge_001"
+  type: "edge"
+  title: "API 文档缺失时不应编造字段"
+  query: "请根据这份不完整 API 文档生成接口测试方案"
+  inputs:
+    files:
+      - "examples/incomplete_api_doc.md"
+    context:
+      missing_fields:
+        - "request_schema"
+        - "error_codes"
+  expected:
+    skill:
+      should_use: "api-test-flow"
+      should_not_use: []
+    must_include:
+      - "NEEDS_CONFIRMATION"
+      - "缺失信息"
+    must_not_include:
+      - "编造接口字段"
+      - "虚构错误码"
+    artifacts:
+      - "api_test_report.json"
+    routing:
+      on_blocked: "human_confirm"
+  assertions:
+    - "status in ['BLOCKED', 'NEEDS_CONFIRMATION']"
+    - "missing_fields.length > 0"
+    - "no_hallucinated_api_fields == true"
+  tags:
+    - "edge"
+    - "anti-hallucination"
+```
+
+### Failure Case
+
+用于验证失败诊断和回流策略。
+
+失败场景应要求输出：
+
+- 失败用例；
+- 期望结果；
+- 实际结果；
+- 失败证据；
+- 疑似原因；
+- 建议回流对象；
+- 下一步动作。
+
+示例：
+
+```yaml
+- id: "failure_001"
+  type: "failure"
+  title: "测试失败时应输出可回流给 coding-agent 的信息"
+  query: "请分析这份 API 测试失败日志，并给出下一步处理建议"
+  inputs:
+    files:
+      - "fixtures/api_test_failure.log"
+    context:
+      current_agent: "api-test-agent"
+  expected:
+    skill:
+      should_use: "api-test-flow"
+      should_not_use: []
+    must_include:
+      - "失败用例"
+      - "期望结果"
+      - "实际结果"
+      - "失败证据"
+      - "疑似原因"
+      - "建议回流对象"
+    must_not_include:
+      - "仅输出测试失败，无下一步建议"
+    artifacts:
+      - "api_test_report.json"
+    routing:
+      on_failure: "coding-agent"
+  assertions:
+    - "status == 'FAIL'"
+    - "failure_count > 0"
+    - "suspected_owner == 'coding-agent'"
+    - "next_action != ''"
+  tags:
+    - "failure"
+    - "routing"
+```

@@ -1,0 +1,42 @@
+---
+title: "YAML 顶层结构"
+description: "Skills Test Specification - YAML 顶层结构"
+---
+
+```yaml
+version: "1.0"
+
+skill:
+  name: "api-test-flow"
+  description: "验证 API 测试类 Skill 的触发、计划和输出契约"
+
+defaults:
+  mode: "dry-run"
+  execution: "no_tool_call"
+  output_format: "json"
+
+cases:
+  - id: "trigger_001"
+    type: "trigger"
+    title: "API 测试请求应触发 api-test-flow"
+    query: "测试登录接口是否符合预期"
+    inputs:
+      files: []
+      context: {}
+    expected:
+      skill:
+        should_use: "api-test-flow"
+        should_not_use:
+          - "ui-acceptance-test"
+          - "release-check"
+      must_include: []
+      must_not_include: []
+      artifacts: []
+      routing: {}
+    assertions:
+      - "selected_skill == 'api-test-flow'"
+    tags:
+      - "trigger"
+      - "positive"
+```
+

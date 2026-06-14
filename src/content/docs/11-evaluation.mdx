@@ -1,0 +1,62 @@
+---
+title: "测试 Skill"
+description: "Skills Test Specification - 评估方式"
+---
+
+### 评分 Rubric
+
+| 维度 | 分数 |
+|---|---:|
+| Skill 选择正确 | 15 |
+| 流程步骤完整 | 20 |
+| 输出契约符合 | 20 |
+| 边界处理合理 | 15 |
+| 失败回流清晰 | 15 |
+| 不越权、不幻觉 | 10 |
+| 表达清晰 | 5 |
+
+通过阈值建议：
+
+:::note[备注]
+- 85+：通过
+- 70 - 84：需人工 Review
+- < 70：失败
+:::
+
+### skill-testing
+
+:::note[skill-testing]
+skill-testing 是一个用于测试 skill 的 skill，其具体实现参见：[https://github.com/wangwei1237/agent-skills/tree/main/skill-testing](https://github.com/wangwei1237/agent-skills/tree/main/skill-testing)。
+:::
+
+可以使用 [`skill-testing`](https://github.com/wangwei1237/agent-skills/tree/main/skill-testing) Skill 方便对 skill 进行测试。
+
+`skill-testing` 的作用是：用标准化的测试用例文件 `tests/skill_cases.yaml` 来验证某个 Skill 是否会被正确触发、是否按预期规划、是否遵守 dry-run 约束，以及输出是否符合契约。
+
+它主要做几件事：
+
+1. 读取并校验 `skill_cases.yaml`  
+   检查是否包含 `version`、`skill.name`、`defaults.mode`、`defaults.execution`、`cases`，以及每个 case 的 `query`、`expected`、`assertions` 等字段。
+
+2. 为每个测试用例生成 dry-run prompt  
+   比如触发类 case 会被改写成：“如果用户这样问，你会用什么 skill？不要执行工具，只输出选择的 skill 和原因。”
+
+3. 捕获 Agent 响应  
+   默认要求用隔离子代理逐个回答测试 prompt，避免测试过程真的执行被测技能的业务逻辑。
+
+4. 归一化响应格式  
+   把原始回答整理成固定 Markdown 结构，包括：
+   - `selected_skill`
+   - `status`
+   - `artifacts`
+   - `routing`
+   - `next_action`
+   - summary、证据、原始响应
+
+5. 运行 scorer 评分  
+   根据 YAML 里的 `expected.skill`、`must_include`、`must_not_include`、`artifacts`、`routing`、`assertions` 判断每个 case 是否通过。
+
+6. 输出测试报告  
+   最终生成 `Skill Test Report`，包含通过数、失败数、总结果、每个 case 的分数和失败原因。
+
+`skill-testing` 是用来测试 Skill 行为契约的，不是用来执行 Skill 真实任务的。它验证“该不该触发、怎么计划、有没有越界”，并通过可复现的 dry-run 响应和报告给出结论。

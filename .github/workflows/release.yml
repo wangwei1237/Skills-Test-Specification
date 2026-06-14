@@ -1,0 +1,58 @@
+name: Build & Release Site
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "The release version of the site, such as v1.0.0"
+        required: true
+        default: "v1.0.0"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build HTML artifact
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install Astro/Starlight dependencies
+        run: npm ci
+
+      - name: Verify Astro toolchain
+        run: |
+          npx astro --version
+          npm ls astro @astrojs/starlight sharp
+
+      - name: Build site
+        run: npm run build
+
+      - name: Package HTML artifact
+        run: |
+          mv dist skills-test-specification
+          tar czf skills-test-specification.tar.gz skills-test-specification
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: skills-test-specification-html
+          path: skills-test-specification.tar.gz
+          if-no-files-found: error
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.version }}
+          name: Build for ${{ github.event.inputs.version }}
+          generate_release_notes: true
+          files: skills-test-specification.tar.gz
