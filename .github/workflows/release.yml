@@ -43,14 +43,14 @@ jobs:
           tar czf skills-test-specification.tar.gz skills-test-specification
 
       - name: Upload workflow artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: skills-test-specification-html
           path: skills-test-specification.tar.gz
           if-no-files-found: error
 
       - name: Create GitHub release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ github.event.inputs.version }}
           name: Build for ${{ github.event.inputs.version }}
