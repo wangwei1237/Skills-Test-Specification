@@ -2,6 +2,8 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
 export default defineConfig({
+  site: 'https://wangwei1237.github.io',
+  base: '/skill-test-spec',
   integrations: [
     starlight({
       title: 'Skills Test Specification',

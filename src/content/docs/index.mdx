@@ -10,10 +10,10 @@ hero:
     file: ../../assets/specification-flow.svg
   actions:
     - text: "开始阅读"
-      link: "/01-goals/"
+      link: "/skill-test-spec/01-goals/"
       icon: "right-arrow"
     - text: "查看 YAML 模板"
-      link: "/12-template/"
+      link: "/skill-test-spec/12-template/"
       icon: "document"
       variant: "secondary"
 ---
@@ -29,22 +29,22 @@ import { CardGrid, LinkCard } from '@astrojs/starlight/components';
 <CardGrid>
   <LinkCard
     title="目标与边界"
-    href="/01-goals/"
+    href="/skill-test-spec/01-goals/"
     description="明确 Skill Test 验证什么、不验证什么，避免和 Agent Eval、Hook Test、Workflow Eval 混淆。"
   />
   <LinkCard
     title="测试类型与模式"
-    href="/03-case-types/"
+    href="/skill-test-spec/03-case-types/"
     description="了解 trigger、plan、contract、edge、failure 五类用例，以及 dry-run、mock、execution 的适用边界。"
   />
   <LinkCard
     title="YAML 结构与字段"
-    href="/06-yaml-structure/"
+    href="/skill-test-spec/06-yaml-structure/"
     description="查看标准 `skill_cases.yaml` 顶层结构、字段含义和可自动化断言的组织方式。"
   />
   <LinkCard
     title="完整模板"
-    href="/12-template/"
+    href="/skill-test-spec/12-template/"
     description="直接复制完整测试模板，为新的 Skill 创建最小可维护测试集。"
   />
 </CardGrid>
@@ -52,16 +52,16 @@ import { CardGrid, LinkCard } from '@astrojs/starlight/components';
 ## 章节目录
 
 <CardGrid>
-  <LinkCard title="目标" href="/01-goals/" description="Skill Test 的定位和验证目标。" />
-  <LinkCard title="测试边界" href="/02-boundaries/" description="关注范围和不关注范围。" />
-  <LinkCard title="测试类型" href="/03-case-types/" description="trigger、plan、contract、edge、failure。" />
-  <LinkCard title="测试模式" href="/04-test-modes/" description="dry-run 优先的测试层级。" />
-  <LinkCard title="文件位置" href="/05-file-location/" description="测试文件和 Skill 目录建议。" />
-  <LinkCard title="YAML 顶层结构" href="/06-yaml-structure/" description="标准测试文件结构示例。" />
-  <LinkCard title="字段说明" href="/07-fields/" description="必填字段、语义和下游消费约定。" />
-  <LinkCard title="各类 Case 编写要求" href="/08-case-guidelines/" description="五类用例的编写要求和示例。" />
-  <LinkCard title="最小测试集要求" href="/09-minimum-suite/" description="每个 Skill 至少需要的测试用例。" />
-  <LinkCard title="编写原则" href="/10-principles/" description="字段统一、断言可自动化、防止越权。" />
-  <LinkCard title="测试 Skill" href="/11-evaluation/" description="评分 Rubric 和 skill-testing 工作流。" />
-  <LinkCard title="完整模板" href="/12-template/" description="可直接落地的 `skill_cases.yaml` 模板。" />
+  <LinkCard title="目标" href="/skill-test-spec/01-goals/" description="Skill Test 的定位和验证目标。" />
+  <LinkCard title="测试边界" href="/skill-test-spec/02-boundaries/" description="关注范围和不关注范围。" />
+  <LinkCard title="测试类型" href="/skill-test-spec/03-case-types/" description="trigger、plan、contract、edge、failure。" />
+  <LinkCard title="测试模式" href="/skill-test-spec/04-test-modes/" description="dry-run 优先的测试层级。" />
+  <LinkCard title="文件位置" href="/skill-test-spec/05-file-location/" description="测试文件和 Skill 目录建议。" />
+  <LinkCard title="YAML 顶层结构" href="/skill-test-spec/06-yaml-structure/" description="标准测试文件结构示例。" />
+  <LinkCard title="字段说明" href="/skill-test-spec/07-fields/" description="必填字段、语义和下游消费约定。" />
+  <LinkCard title="各类 Case 编写要求" href="/skill-test-spec/08-case-guidelines/" description="五类用例的编写要求和示例。" />
+  <LinkCard title="最小测试集要求" href="/skill-test-spec/09-minimum-suite/" description="每个 Skill 至少需要的测试用例。" />
+  <LinkCard title="编写原则" href="/skill-test-spec/10-principles/" description="字段统一、断言可自动化、防止越权。" />
+  <LinkCard title="测试 Skill" href="/skill-test-spec/11-evaluation/" description="评分 Rubric 和 skill-testing 工作流。" />
+  <LinkCard title="完整模板" href="/skill-test-spec/12-template/" description="可直接落地的 `skill_cases.yaml` 模板。" />
 </CardGrid>
