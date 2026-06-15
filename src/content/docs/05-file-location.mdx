@@ -3,6 +3,8 @@ title: "文件位置"
 description: "Skills Test Specification - 文件位置"
 ---
 
+import { FileTree } from '@astrojs/starlight/components';
+
 每个 Skill 至少维护一份测试文件：
 
 ```text
@@ -11,15 +13,15 @@ ${ABS_ROOT}/skills/<skill-name>/tests/skill_cases.yaml
 
 推荐结构：
 
-```bash
-${ABS_ROOT}/
-└── skills/
-    └── <skill-name>/
-        ├── SKILL.md
-        ├── scripts/
-        │   └── script.py
-        └── tests/
-            └── skill_cases.yaml
-```
+<FileTree>
 
+- ABS_ROOT
+  - skills
+    - skill-name
+      - SKILL.md
+      - scripts
+         - script.py
+      - tests
+        - skill_cases.yaml
 
+</FileTree>

@@ -5,13 +5,12 @@ description: "Skills Test Specification - 目标"
 
 Skill 是一种**过程性知识**，用于指导模型完成某一类任务。Skill Test 的目标不是验证真实业务最终是否成功，而是验证：
 
-- Skill 是否在正确场景下被触发；
-- 模型是否理解 Skill 的执行流程；
-- 输出产物是否符合约定；
-- 信息缺失、失败、边界场景下是否处理合理；
-- Skill 输出是否能被 Agent、Hook 或 Workflow 后续消费。
+- Skill 是否能够在正确场景下被稳定触发；
+- 模型是否能稳定理解 Skill 的执行流程；
+- Skill 中的输出产物是否稳定、是否符合约定；
+- Skill 在信息缺失、失败、边界场景下的处理是否合理；
+- Skill 输出是否能被 Agent、Hook 或 Workflow 后续消费；
 
 :::note[备注]
 Skill Test 是测“方案是否可靠”；而对应的 Agent Test 是测“执行是否正确”。
 :::
-
